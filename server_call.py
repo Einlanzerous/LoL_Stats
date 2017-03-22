@@ -80,7 +80,7 @@ def request_data(summoner_request):
             "kills": kills,
             "deaths": deaths,
             "assists": assists,
-            "avgerage_cs_per_min": round(avg_game_cs, 1),
+            "average_cs_per_min": round(avg_game_cs, 1),
             "average_cs": (int)(avg_cs),
             "average_time": round(avg_time, 2),
             "date_created": time.asctime(time.localtime(time.time()))
