@@ -1,6 +1,6 @@
-#test file for trying to pull summoner names from the server.
-
+#Code for making requests as users need them to Caitlyn
 #Created by Ashley Dodson
+#March 2017, for CSCI 344 API Project
 
 import os
 import time
