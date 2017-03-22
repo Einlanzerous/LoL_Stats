@@ -8,23 +8,30 @@ from cassiopeia import riotapi
 from cassiopeia.type.core.common import LoadPolicy, StatSummaryType
 import pymongo
 from pymongo import MongoClient
+import server_call
 
 #Create database connections
-server = MongoClient("mongodb://ruler:Katarina7!@ds135700.mlab.com:35700/summonertest")
-serverdb = server.summonertest
-
 namerequest = MongoClient("mongodb://emperor:Caitlyn7!@ds058739.mlab.com:58739/namerequest")
 requestdb = namerequest.namerequest
 
+while 1:
+    print "No current requests, awaiting new request"
 
-#Test getting name
-testval = serverdb.summonerdata.find()
+    if(requestdb.name_lists.count() > 0):
+        print "New request incoming"
 
-for each in testval:
-    print (each)
+        #Test displaying names
+        showval = requestdb.name_lists.find()
 
-#Test displaying names
-showval = requestdb.name_list.find()
+        # Send name for request
+        current_name = showval[0]["name"]
 
-for each in showval:
-    print each
+        print "Requesting ", current_name, " be added to Katarina server"
+
+        server_call.request_data(current_name)
+
+        # Remove newly pulled name from Caitlyn server
+        if (requestdb.name_lists.find({"name": current_name})):
+            requestdb.name_lists.delete_many({"name": current_name})
+
+        print "Removed request from Caitlyn server"
