@@ -43,3 +43,4 @@ if (katdb.summonerdata.count() > 0):
         print_stats(datapoints, i)
 else:
     print "...Katarina has no data within."
+
