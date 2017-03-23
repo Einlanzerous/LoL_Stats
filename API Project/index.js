@@ -1,4 +1,4 @@
-/* @authors: Ashely Dodson, Leng Ghuy, Michael Scott
+/* @authors: Ashley Dodson, Leng Ghuy, Michael Scott
    @class: CSCI 344 - Web Technology
    @date: March 23, 2017
 */
