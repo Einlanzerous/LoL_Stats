@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+    <head>
+        <title>League of Legends</title>
+        <style type="text/css">
+            body {background-image: url(lolImage.jpg);
+                  background-repeat: none;
+                  background-size: 100%;}
+            div.main {width:  800px;
+                position: relative;
+                margin-left: auto;
+                margin-right: auto;
+                background-color: rgba(0,0,0,.9);
+                border: 30px solid transparent;
+                border-image: url(border.png) 50 round;}
+            p { font-family: Verdana;
+                font-size: 20px;
+                color: darkgoldenrod;
+                font-weight: bold;}
+            ul {padding-top: 10%;}
+            li {color: darkgoldenrod;};
+            table {padding-top: 10%;
+                    padding-bottom: 3%;}
+            td{color: white;}
+        </style>
+               
+    </head>
+    
+    <body>
+        <div class="main" ng-controller="myCtrl">
+            
+            <p>SUMMONOR NAME: </p> 
+            <input type="text" ng-model="summonerName">
+            <button ng-disabled="!summonerName.length" ng-click="sendName()">Enter</button>
+            
+            <div class="welcome">
+                <ul ng-repeat="n in name">
+                    <li>Welcome {{n.name}}!</li>
+                    <li><button ng-click="seeStat()">See Stat</button></li>
+                </ul>
+                <table>
+                    <tr>
+                        <td>Let's See</td>
+                        <td>IF THIS</td>
+                        <td>Fucking Work</td>
+                    </tr>
+                    <tr ng-repeat="s in stat">
+                        <td>{{s.summoner}}</td>
+                        <td>{{s.kills}}</td>
+                        <td>{{s.deaths}}</td>
+                        <td>{{s.kda}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <script 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js">
+		</script>
+        
+        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+        
+        <script type="text/javascript">
+            (function() {
+                var app = angular.module('myApp', []);
+    
+                app.controller('myCtrl', ['$scope', function($scope) {
+                    $scope.summonerName = '';
+                    $scope.name = [];
+                    $scope.stat = [];
+                    var errorCatching = {
+                        "summoner": 'Invalid Summoner Name'
+                    }
+        
+                    $scope.sendName = function() {
+                        var summonerName = {
+                            "name": $scope.summonerName
+                        }
+                        $.post('putName', summonerName);
+                        $scope.name[0] = summonerName;
+                        
+                    }
+                    
+                    $scope.seeStat = function () {
+                        $.getJSON('getStat', function(result) {
+                            
+                            console.log($scope.name[0].name);
+                            console.log(result.summoner);
+                            if ($scope.name[0].name.toLowerCase() ===         result.summoner.toLowerCase()) {
+                                $scope.stat[0] = result;
+                            } else {
+                                console.log("Hello, World");
+                                $scope.stat[0] = errorCatching;
+                            }
+                        })
+                        $scope.summonerName = '';
+                    }
+                    
+                }])
+            }());
+        </script>
+    </body>
+</html>
