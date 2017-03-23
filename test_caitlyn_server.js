@@ -30,4 +30,4 @@ var listname = function (providedName) {
     });
 };
 
-listname("C9 Gun");
+listname("Contractz");
