@@ -2,11 +2,31 @@
     "use strict";
     
     console.log("Starting...");
-    
+
+    var MongoClient = require('mongodb').MongoClient;
     var express = require('express'),
         bodyParser = require('body-parser'),
         mongoose = require('mongoose'),
         app = express();
+    var assert = require('assert');
+    var ObjectId = require('mongodb').ObjectID;
+    var url = 'mongodb://ruler:Katarina7!@ds135700.mlab.com:35700/summonertest';
+
+    var pullnames = function(db, callback) {
+        var cursor = db.collection('summonerdata').find();
+        cursor.each(function(err, doc) {
+            assert.equal(err, null);
+            if (doc != null) {
+                var test = doc;
+                if(test.summoner == "Einlanzerous"){
+                    console.dir(doc);
+                }
+                //console.dir(doc);
+            } else {
+                callback();
+            }
+        });
+    };
     
     mongoose.Promise = global.Promise;
     
@@ -45,13 +65,11 @@
         }));
     
     app.get("/getStat", function(req, res) {
-        Stat.find(req.query, function(err, stat) {
-            if (err) {
-                console.log(err);
-            } else {
-                console.log(stat);
-                res.json(stat);
-            }
+        MongoClient.connect(url, function(err, db) {!
+            assert.equal(null, err);
+            pullnames(db, function() {
+                db.close();
+            });
         });
     });
     

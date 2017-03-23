@@ -4,7 +4,7 @@
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://ruler:Katarina7!@ds135700.mlab.com:35700/summonertest'
+var url = 'mongodb://ruler:Katarina7!@ds135700.mlab.com:35700/summonertest';
 
 var pullnames = function(db, callback) {
     var cursor = db.collection('summonerdata').find();
