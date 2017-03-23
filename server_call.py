@@ -31,7 +31,10 @@ def request_data(summoner_request):
     avg_game_cs = 0
     avg_time = 0
     cs = 0
-    name_request = summoner_request #CHANGE TO DESIRED LOOKUP NAME
+    try :
+        name_request = summoner_request #CHANGE TO DESIRED LOOKUP NAME
+    except:
+        return None
     summoner = riotapi.get_summoner_by_name(name_request)
     match_list = summoner.match_list()
 
@@ -65,13 +68,12 @@ def request_data(summoner_request):
     #TODO Create scores for various items
 
     #Verify user not already on server, delete if pre-existing
-    if(db.summonerdata.find({"sname": summoner.name})):
-        clear = db.summonerdata.delete_many({"sname": summoner.name})
-    if(db.summonerdata.find({"summoner": summoner.name})):
-        clear = db.summonerdata.delete_many({"summoner": summoner.name})
+    if(db.summoners.count() > 0):
+        if(db.summoners.find({"summoner": summoner.name})):
+            clear = db.summoners.delete_many({"summoner": summoner.name})
 
     #Push to server
-    pushVal = db.summonerdata.insert_one(
+    pushVal = db.summoners.insert_one(
         {
             "summoner": summoner.name,
             "level": summoner.level,
@@ -90,9 +92,11 @@ def request_data(summoner_request):
 
 
     #Report data on server to console
-    """display = db.summonerdata.find().sort([
+    """display = db.summoners.find().sort([
         ("summoner", pymongo.ASCENDING)
         ])
 
     for summoners in display:
         print(summoners)"""
+
+request_data("Rhazik")
