@@ -1,0 +1,150 @@
+<!doctype html>
+
+<!-- @authors: Ashley Dodson, Leng Ghuy, Michael Scott
+     @class: CSCI 244 - Web Technology
+     @date: March 23, 2017
+-->
+
+<html lang="en" ng-app="myApp">
+    <head>
+        <title>League of Legends</title>
+        <style type="text/css">
+            body {background-image: url(lolImage.jpg);
+                  background-repeat: none;
+                  background-size: 100%;}
+            div.main {width:  800px;
+                height: 400px;
+                position: absolute;
+                margin:auto;
+                top: 0px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,.9);
+                border: 30px solid transparent;
+                border-image: url(border.png) 50 round;}
+            div.name {padding-top: 30px;
+                width: 800px;
+                height: 100px;
+                align-content: center;
+                padding-bottom: 20px;}
+            div.stat{width: 800px;
+                height: 200px;
+                margin-top: 90px;
+                margin-left: 40px;}
+            p {font-size: 20px;
+                color: white;}
+            em {font-weight: bold;
+                color: darkgoldenrod;}
+            li {font-family: Verdana;
+                font-size: 20px;
+                font-weight: bold;
+                list-style: none;
+                color: darkgoldenrod;}
+            #note {font-size: 10px;
+                color: white;
+                margin-top: 5px;
+                font-weight: none;}
+            table {border-collapse: collapse;}
+            tr, td {border: 2px solid darkgoldenrod;}
+            td{color: white;
+                padding-top: 5px;
+                padding-bottom: 5px;
+                padding-left: 10px;
+                padding-right: 10px;
+                text-align: center;}
+        </style>
+               
+    </head>
+    
+    <body>
+        <div class="main" ng-controller="myCtrl">
+            
+            <div class="name">
+            <ul>
+                <li>Summoner Name:</li>
+                <li><input type="text" ng-model="summonerName">
+            <button ng-disabled="!summonerName.length" ng-click="sendName()">Enter</button></li>
+            </ul>
+            <ul ng-repeat="n in name">
+                <li>Welcome {{n.name}}!</li>
+                <li><button ng-click="seeStat()">See Stat</button></li>
+                <li id="note"><span>(Please click "See Stat" until data appears)</span></li>
+            </ul>
+            </div>
+            
+            <div class="stat" ng-repeat="s in stat">
+                <p>Summoner: <em>{{s.summoner}}</em></p>
+                <table >
+                    <tr>
+                        <td>Level</td>
+                        <td>Kills</td>
+                        <td>Deaths</td>
+                        <td>KDA</td>
+                        <td>Assists</td>
+                        <td>Avg. Time</td>
+                        <td>Avg. CS</td>
+                        <td>Avg. CS/Minute</td>
+                        <td>Matches Polled</td>
+                        
+                    </tr>
+                    <tr>
+                        <td>{{s.level}}</td>
+                        <td>{{s.kills}}</td>
+                        <td>{{s.deaths}}</td>
+                        <td>{{s.kda}}</td>
+                        <td>{{s.assists}}</td>
+                        <td>{{s.average_time}}</td>
+                        <td>{{s.average_cs}}</td>
+                        <td>{{s.average_cs_per_min}}</td>
+                        <td>{{s.matches_polled}}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <script 	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.2/angular.min.js">
+		</script>
+        
+        <script src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+        
+        <script type="text/javascript">
+            (function() {
+                var app = angular.module('myApp', []);
+    
+                app.controller('myCtrl', ['$scope', function($scope) {
+                    $scope.summonerName = '';
+                    $scope.name = [];
+                    $scope.stat = [];
+                    var errorCatching = {
+                        "summoner": 'Invalid Summoner Name'
+                    }
+        
+                    $scope.sendName = function() {
+                        var summonerName = {
+                            "name": $scope.summonerName
+                        }
+                        $.post('putName', summonerName);
+                        $scope.name[0] = summonerName;
+                        $scope.summonerName = '';
+                    }
+                    
+                    $scope.seeStat = function () {
+                        $.getJSON('getStat', function(result) {
+                            
+                            console.log($scope.name[0].name);
+                            console.log(result.summoner);
+                            if ($scope.name[0].name.toLowerCase() ===         result.summoner.toLowerCase()) {
+                                $scope.stat[0] = result;
+                            } else {
+                                console.log("Invalid Summoner Name");
+                                $scope.stat[0] = errorCatching;
+                            }
+                        })
+                    }
+                    
+                }])
+            }());
+        </script>
+    </body>
+</html>

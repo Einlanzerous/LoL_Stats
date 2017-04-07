@@ -1,0 +1,13 @@
+{
+  "name": "api_project",
+  "version": "0.5.0",
+  "description": "Stat aggregator for League of Legends",
+  "main": "index.js",
+  "author": "Ashley Dodson, Leng Ghuy, Michael Scott",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mongoose": "^4.9.1",
+    "mongodb": "^2.2.25"
+  }
+}
